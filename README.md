@@ -1,3 +1,21 @@
+# Summary
+// A short 4-sentence summary of you visualization
+
+# Design
+// Explain any design choices you made including changes to the visualization after collecting feedback
+
+# Feedback
+// Include all feedback you received from others on your visualization from the first sketch to the final visualization
+
+# Resources & Tools
+// Links to sources & tools I used in the whole process
+
+
+</br>
+</br>
+</br>
+# Extras
+
 ## Padlet
 https://padlet.com/simona_orzan/qfzymqaprs80
 
