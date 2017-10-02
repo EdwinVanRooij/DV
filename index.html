@@ -6,7 +6,7 @@
 <body>
 <script src="http://d3js.org/d3.v3.min.js" charset=" utf-8"></script>
 
-<button onclick='render([10, 20, 30, 40]);'>Take action!</button>
+<button onclick='render([30, 50, 80]);'>Take action!</button>
 <script>
     render([10, 20, 30]);
 
@@ -16,11 +16,13 @@
             .data(dataToRender);
 
         var entering = selector.enter();
-        entering
-            .append('div')
-            .text(function (d) {
-                return d;
-            });
+        entering.append('div').text(function (d) {
+            return d;
+        });
+
+        selector.text(function (div) {
+            return div;
+        })
     }
 </script>
 
