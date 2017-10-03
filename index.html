@@ -6,7 +6,7 @@
 <body>
 <script src="http://d3js.org/d3.v3.min.js" charset=" utf-8"></script>
 
-<button onclick='render([30, 50, 80]);'>Take action!</button>
+<button onclick='render([30, 50]);'>Take action!</button>
 <script>
     render([10, 20, 30]);
 
@@ -22,7 +22,11 @@
 
         selector.text(function (div) {
             return div;
-        })
+        });
+
+        var exiting = selector.exit();
+        exiting.remove();
+
     }
 </script>
 
