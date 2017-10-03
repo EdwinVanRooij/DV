@@ -4,98 +4,50 @@
     <meta name="description" content="D3byEX 2.14">
 </head>
 <body>
+
 <script src="http://d3js.org/d3.v3.min.js" charset=" utf-8"></script>
 
-<svg width="1000" height="1000">
-
-    <!--<g transform="rotate(20, 500, 125) translate(0,200)">-->
-
-        <!--<path fill="lightgrey"-->
-              <!--d="M 0 0 L 500 62 L 1000 250 L 500 188 Z"-->
-              <!--stroke="cyan"-->
-              <!--stroke-width="4"-->
-              <!--stroke-opacity="0.5"-->
-        <!--&gt;</path>-->
-
-        <!--<text x="415" y="55"-->
-              <!--fill="white"-->
-              <!--font-family="helvetica" font-size="30"-->
-              <!--transform="rotate(10)"-->
-              <!--stroke="cyan" stroke-opacity="0.3"-->
-        <!--&gt;-->
-            <!--Prachtig fnieee-->
-        <!--</text>-->
-
-    <!--</g>-->
-
-    <g>
-        <circle cx="500" cy="250"
-                r="250"
-                fill="red"
-                opacity="0.5"
-                stroke="cyan" stroke-width="3" stroke-opacity="0.5"
-        >
-        </circle>
-        <circle cx="350" cy="500"
-                r="250"
-                fill="cyan"
-                opacity="0.5"
-                stroke="yellow" stroke-width="3" stroke-opacity="0.5"
-        >
-        </circle>
-        <circle cx="650" cy="500"
-                r="250"
-                fill="yellow"
-                opacity="0.5"
-                stroke="red" stroke-width="3" stroke-opacity="0.5"
-        >
-        </circle>
-        <text x="420" y="450"
-        fill="black"
-        font-family="helvetica" font-size="25"
-        stroke="white" stroke-opacity="0.4" stroke-width="2"
-        >
-        Prachtig fnieee
-        </text>
-    </g>
-
-</svg>
-
-<!--<br>-->
-
-<!--<svg width="1000" height="250">-->
-<!--<path d="M 100 0 L 160 100 M 310 100 L 370 200 M 520 0 L 580 100 Z" stroke="black"></path>-->
-<!--<path d="M 160 100 L 370 200 M 370 200 L 580 100" stroke="black"></path>-->
-<!--<path d="M 520 0 L 310 100 M 310 100 L 100 0" stroke="black"></path>-->
-<!--</svg>-->
-
-<br>
-<button onclick='render([30, 50]);'>Take action!</button>
-
-
 <script>
-    render([10, 20, 30]);
 
-    function render(dataToRender) {
-        var selector = d3.select('body')
-            .selectAll('div')
-            .data(dataToRender);
+    //    var data = [55, 44, 30, 23, 17, 14, 16, 25, 41, 61, 85,
+    //        101, 95, 105, 114, 150, 180, 210, 125, 100, 71,
+    //        75, 72, 67];
+    var data = [{name: 'hi', num: 55}, {name: 'haii', num: 44}];
 
-        var entering = selector.enter();
-        entering.append('div').text(function (d) {
-            return d;
-        });
+    var barWidth = 25, barPadding = 5;
+    var maxValue = 55;
 
-        selector.text(function (div) {
-            return div;
-        });
+    var graphGroup = d3.select('body')
+        .append('svg')
+        .attr({width: 1000, height: 300})
+        .append('g');
 
-        var exiting = selector.exit();
-        exiting.remove();
-
+    function calculateXLocation(index) {
+        return index * (barWidth + barPadding);
     }
-</script>
 
+    function calculateYLocation(d) {
+        return maxValue - d.num;
+    }
+
+    function generateTranslator(d, index) {
+        return "translate(" + calculateXLocation(index) + ", " + calculateYLocation(d) + ")";
+    }
+
+    graphGroup.selectAll("rect")
+        .data(data)
+        .enter()
+        .append('rect')
+        .attr({
+            fill: 'cyan',
+            transform: generateTranslator,
+            width: barWidth,
+            height: function (d) {
+                return d.num;
+            }
+        })
+
+</script>
 
 </body>
 </html>
