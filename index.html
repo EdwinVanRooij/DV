@@ -1,61 +1,111 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta name="description" content="D3byEX 2.14">
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+    <meta name="description" content="D3byEX 4.1"/>
+    <meta charset="utf-8">
 </head>
 <body>
-<script src="http://d3js.org/d3.v3.min.js" charset=" utf-8"></script>
-
-<svg width="1000" height="250">
-
-    <path fill="grey" d="M 0 0 L 500 62 L 1000 250 L 500 188 Z"
-          stroke="cyan"
-          stroke-width="4"
-    ></path>
-    <text x="450" y="130" fill="white" font-family="helvetica" font-size="20">
-        Prachtig fnieee
-    </text>
-
-</svg>
-
-<br>
-
-<svg width="1000" height="250">
-    <path d="M 100 0 L 160 100 M 310 100 L 370 200 M 520 0 L 580 100 Z" stroke="black"></path>
-    <path d="M 160 100 L 370 200 M 370 200 L 580 100" stroke="black"></path>
-    <path d="M 520 0 L 310 100 M 310 100 L 100 0" stroke="black"></path>
-</svg>
-
-<br>
-<button onclick='render([30, 50]);'>Take action!</button>
-
-
 <script>
-    render([10, 20, 30]);
+    var data = [55, 44, 30, 23, 17, 14, 16, 25, 41, 61, 85,
+        101, 95, 105, 114, 150, 180, 210, 125, 100, 71,
+        75, 72, 67];
 
-    d3.select('body').select('svg').selectAll('circle').style('fill', 'purple');
+    var barWidth = 50, barPadding = 8;
+    var maxValue = d3.max(data);
 
-    function render(dataToRender) {
-        var selector = d3.select('body')
-            .selectAll('div')
-            .data(dataToRender);
+    var graphWidth = data.length * (barWidth + barPadding) - barPadding;
+    var margin = {top: 10, right: 10, bottom: 10, left: 50};
 
-        var entering = selector.enter();
-        entering.append('div').text(function (d) {
-            return d;
-        });
+    var totalWidth = graphWidth + margin.left + margin.right;
+    var totalHeight = maxValue + margin.top + margin.bottom;
 
-        selector.text(function (div) {
-            return div;
-        });
+    var svg = d3.select('body')
+        .append('svg')
+        .attr({width: totalWidth, height: totalHeight});
 
-        var exiting = selector.exit();
-        exiting.remove();
+    svg.append('rect').attr({
+        width: totalWidth, height: totalHeight,
+        fill: 'white',
+        stroke: 'black', 'stroke-width': 1
+    });
 
+    var mainGroup = svg
+        .append('g')
+        .attr('transform', 'translate(' + margin.left + ',' + margin.top + ")");
+
+    mainGroup.append('rect').attr({
+        fill: 'rgba(0,0,0,0.1)', width: totalWidth - (margin.left + margin.right),
+        height: totalHeight - (margin.bottom + margin.top)
+    });
+
+    function xloc(d, i) {
+        return i * (barWidth + barPadding);
     }
+
+    function yloc(d) {
+        return maxValue - d;
+    }
+
+    function translator(d, i) {
+        return "translate(" + xloc(d, i) + "," + yloc(d) + ")";
+    }
+
+    var barGroup = mainGroup.selectAll('g')
+        .data(data)
+        .enter()
+        .append('g')
+        .attr('transform', translator);
+
+    barGroup.append('rect')
+        .attr({
+            fill: 'steelblue',
+            width: barWidth,
+            height: function (d) {
+                return d;
+            }
+        });
+
+    var textTranslator = "translate(" + barWidth / 2 + ",0)";
+
+    barGroup.append('text')
+        .text(function (d) {
+            return d;
+        })
+        .attr({
+            fill: 'white',
+            'alignment-baseline': 'before-edge',
+            'text-anchor': 'middle',
+            transform: textTranslator
+        })
+        .style('font', '10px sans-serif');
+
+    var leftAxisGroup = svg.append('g');
+    var axisPadding = 3;
+    leftAxisGroup.attr({transform: 'translate(' + (margin.left - axisPadding) + ',' + margin.top + ')'});
+    var scale = d3.scale
+        .linear()
+        .domain([maxValue, 0])
+        .range([0, maxValue]);
+
+    var axis = d3.svg.axis()
+        .orient('left')
+        .scale(scale);
+
+    var axisNodes = leftAxisGroup.call(axis);
+    var domain = axisNodes.selectAll('.domain');
+    domain.attr({
+        fill: 'none',
+        'stroke-width': 1,
+        stroke: 'black'
+    });
+    var ticks = axisNodes.selectAll('.tick line');
+    ticks.attr({
+        fill: 'none',
+        'stroke-width': 1,
+        stroke: 'black'
+    });
 </script>
-
-
 </body>
 </html>
 
