@@ -13,7 +13,7 @@ for item in your_list[1:]:
         quarter = 1
     elif 4 <= int(month) <= 6:
         quarter = 2
-    elif 4 <= int(month) <= 6:
+    elif 7 <= int(month) <= 9:
         quarter = 3
     else:
         quarter = 4
