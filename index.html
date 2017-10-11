@@ -1,56 +1,74 @@
 <!DOCTYPE html>
-<html>
 <head>
     <meta name="description" content="D3byEX 6.4"/>
     <meta charset="utf-8">
+
+    <style>
+        .loading {
+            color: white;
+            background-color: steelblue;
+            text-align: center;
+            padding: 3px;
+            border: 6px solid steelblue;
+            border-radius: 5px;
+        }
+
+        .chart div {
+            background-color: steelblue;
+            padding: 10px;
+            margin: 2px;
+            color: white;
+            text-align: right;
+        }
+    </style>
+
 </head>
 <body>
+<div class="loading">
+    <h1>Loading...</h1>
+</div>
+<div class="chart"></div>
 <script src="https://d3js.org/d3.v3.min.js"></script>
 <script>
 
-    svg = d3.select('body')
-        .append('svg')
-        .attr('width', 1400)
-        .attr('height', 1400);
+    d3.csv("data-test.csv", function (data) {
+        removeLoading();
 
-    rect = svg.append('rect')
-        .attr('width', 200)
-        .attr('height', 200)
-        .attr('x', 0)
-        .attr('y', 0)
-        .attr('fill', 'steelblue');
+        var filtered_data = data.map(function (row) {
+            return {
+                year: row['date_created'].substr(0, 4)
+            };
+        });
 
-    rect.transition()
-        .duration(750)
-        .attr('fill', 'white')
-        .attr('x', 50)
-        .attr('y', 50)
-        .attr('width', 100)
-        .attr('height', 100)
-        .transition()
-        .duration(500)
-        .attr('fill', 'steelblue')
-        .attr('x', 0)
-        .attr('y', 0)
-        .attr('width', 200)
-        .attr('height', 200)
-        .transition()
-        .duration(1000)
-        .attr('transform', 'translate(100,100)')
-        .transition()
-        .duration(1000)
-        .attr('transform', 'translate(500, 200) rotate(90)')
-        .attr('fill', 'yellow')
-        .transition()
-        .duration(1000)
-        .attr('transform', 'translate(250, 1100) rotate(180)')
-        .attr('fill', 'red')
-        .transition()
-        .duration(2500)
-        .attr('transform', 'translate(500, 500) rotate(360)')
-        .attr('fill', 'black')
+        filtered_data.forEach(function (d) {
+            dict[d] += 1;
+        });
 
+        console.log(dict);
+    });
 
+    function drawData(data) {
+
+//        var data = [10, 200, 230, 122, 305];
+//        var x = d3.scale.linear()
+//            .domain([10, 305])
+//            .range([0, 400]);
+//
+//        d3.select('.chart')
+//            .selectAll('div')
+//            .data(data)
+//            .enter().append('div')
+//            .style('width', function (d) {
+//                return x(d) + 'px';
+//            })
+//            .text(function (d) {
+//                return d;
+//            });
+    }
+
+    function removeLoading() {
+        d3.select('.loading').remove();
+    }
 </script>
 </body>
-</html>
+
