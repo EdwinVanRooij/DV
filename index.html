@@ -31,39 +31,29 @@
 <script src="https://d3js.org/d3.v3.min.js"></script>
 <script>
 
-    d3.csv("data-test.csv", function (data) {
+    d3.csv("posts-by-quarter.csv", function (data) {
         removeLoading();
 
-        var filtered_data = data.map(function (row) {
-            return {
-                year: row['date_created'].substr(0, 4)
-            };
-        });
-
-        filtered_data.forEach(function (d) {
-            dict[d] += 1;
-        });
-
-        console.log(dict);
+        drawData(data);
+        console.log(data);
     });
 
     function drawData(data) {
 
-//        var data = [10, 200, 230, 122, 305];
-//        var x = d3.scale.linear()
-//            .domain([10, 305])
-//            .range([0, 400]);
-//
-//        d3.select('.chart')
-//            .selectAll('div')
-//            .data(data)
-//            .enter().append('div')
-//            .style('width', function (d) {
-//                return x(d) + 'px';
-//            })
-//            .text(function (d) {
-//                return d;
-//            });
+        var x = d3.scale.log()
+            .domain([2000, 50000])
+            .range([0, 1500]);
+
+        d3.select('.chart')
+            .selectAll('div')
+            .data(data)
+            .enter().append('div')
+            .style('width', function (d) {
+                return x(d.amount) + 'px';
+            })
+            .text(function (d) {
+                return d.amount;
+            });
     }
 
     function removeLoading() {
