@@ -1,54 +1,56 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta name="description" content="D3byEX 2.14">
+    <meta name="description" content="D3byEX 6.4"/>
+    <meta charset="utf-8">
 </head>
 <body>
-
-<script src="http://d3js.org/d3.v3.min.js" charset=" utf-8"></script>
-
+<script src="https://d3js.org/d3.v3.min.js"></script>
 <script>
 
-    //    var data = [55, 44, 30, 23, 17, 14, 16, 25, 41, 61, 85,
-    //        101, 95, 105, 114, 150, 180, 210, 125, 100, 71,
-    //        75, 72, 67];
-    var data = [{name: 'hi', num: 55}, {name: 'haii', num: 44}];
-
-    var barWidth = 25, barPadding = 5;
-    var maxValue = 55;
-
-    var graphGroup = d3.select('body')
+    svg = d3.select('body')
         .append('svg')
-        .attr({width: 1000, height: 300})
-        .append('g');
+        .attr('width', 1400)
+        .attr('height', 1400);
 
-    function calculateXLocation(index) {
-        return index * (barWidth + barPadding);
-    }
+    rect = svg.append('rect')
+        .attr('width', 200)
+        .attr('height', 200)
+        .attr('x', 0)
+        .attr('y', 0)
+        .attr('fill', 'steelblue');
 
-    function calculateYLocation(d) {
-        return maxValue - d.num;
-    }
+    rect.transition()
+        .duration(750)
+        .attr('fill', 'white')
+        .attr('x', 50)
+        .attr('y', 50)
+        .attr('width', 100)
+        .attr('height', 100)
+        .transition()
+        .duration(500)
+        .attr('fill', 'steelblue')
+        .attr('x', 0)
+        .attr('y', 0)
+        .attr('width', 200)
+        .attr('height', 200)
+        .transition()
+        .duration(1000)
+        .attr('transform', 'translate(100,100)')
+        .transition()
+        .duration(1000)
+        .attr('transform', 'translate(500, 200) rotate(90)')
+        .attr('fill', 'yellow')
+        .transition()
+        .duration(1000)
+        .attr('transform', 'translate(250, 1100) rotate(180)')
+        .attr('fill', 'red')
+        .transition()
+        .duration(2500)
+        .attr('transform', 'translate(500, 500) rotate(360)')
+        .attr('fill', 'black')
 
-    function generateTranslator(d, index) {
-        return "translate(" + calculateXLocation(index) + ", " + calculateYLocation(d) + ")";
-    }
-
-    graphGroup.selectAll("rect")
-        .data(data)
-        .enter()
-        .append('rect')
-        .attr({
-            fill: 'cyan',
-            transform: generateTranslator,
-            width: barWidth,
-            height: function (d) {
-                return d.num;
-            }
-        })
 
 </script>
-
 </body>
 </html>
-
