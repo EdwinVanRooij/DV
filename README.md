@@ -1,5 +1,5 @@
 # Summary
-// A short 4-sentence summary of you visualization
+// A short 4-sentence summary of your visualization
 
 # Design
 // Explain any design choices you made including changes to the visualization after collecting feedback
