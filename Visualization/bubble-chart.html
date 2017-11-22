@@ -18,6 +18,15 @@
             .attr("height", diameter)
             .attr("class", "bubble");
 
+        svg.append("text")
+            .attr("x", (diameter / 2))
+            .attr("y", 65)
+            .attr("text-anchor", "middle")
+            .style("font-size", "18px")
+            .style("text-decoration", "underline")
+            .text("Word frequencies for year 2012");
+
+
         d3.csv("2012_50.csv", function (error, data) {
 
             //convert numerical values from strings to numbers
