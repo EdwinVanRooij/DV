@@ -64,3 +64,12 @@ print(words)
 
 print("Frequency:")
 print(frequency)
+
+
+f = open("test.csv", "w")
+
+f.write("word,frequency\n")
+for i in xrange(len(words)):
+    f.write("{},{}\n".format(words[i], frequency[i]))
+
+f.close()
