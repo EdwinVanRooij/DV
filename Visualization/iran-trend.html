@@ -12,36 +12,46 @@
             */
 
             "use strict";
-            var margin = 75,
+            var margin = 175,
                 width = 1400 - margin,
-                height = 600 - margin;
+                height = 1000 - margin;
+
 
             var svg = d3.select("body")
                 .append("svg")
-                .attr("width", width + margin)
-                .attr("height", height + margin)
+                .attr("width", width )
+                .attr("height", height)
                 .append('g')
                 .attr('class', 'chart');
+
+            svg.append("text")
+                .attr("x", (width / 2))
+                .attr("y", 65)
+                .attr("text-anchor", "middle")
+                .style("font-size", "18px")
+                .style("text-decoration", "underline")
+                .text("'Iran' word frequency trend");
 
             /*
               Dimple.js Chart construction code
             */
 
             var myChart = new dimple.chart(svg, data);
-            var x = myChart.addTimeAxis("x", "year");
-            myChart.addMeasureAxis("y", "attendance");
-            myChart.addSeries(null, dimple.plot.bar);
+            myChart.addTimeAxis("x", "date");
+            myChart.addMeasureAxis("y", "frequency");
+            myChart.addSeries(null, dimple.plot.line);
             myChart.draw();
         }
     </script>
 </head>
 <body>
+<script src="http://d3js.org/d3.v3.min.js"></script>
 <script type="text/javascript">
     /*
       Use D3 (not dimple.js) to load the TSV file
       and pass the contents of it to the draw function
       */
-    d3.tsv("world_cup.tsv", draw);
+    d3.csv("iran-trend.csv", draw);
 </script>
 </body>
 </html>
