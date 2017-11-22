@@ -66,7 +66,7 @@ print("Frequency:")
 print(frequency)
 
 
-f = open("test.csv", "w")
+f = open("{}_{}.csv".format(str(year), str(amount)), "w")
 
 f.write("word,frequency\n")
 for i in range(len(words)):
