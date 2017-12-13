@@ -25,37 +25,39 @@
 
 <script src="d3.slider.js"></script>
 <div id="slider3"></div>
+<svg>
+    <text></text>
+    <g></g>
+</svg>
 
 <script type="text/javascript">
-
-    //        var svg = d3.select("body").append("svg")
-    //            .attr("width", 2000)
-    //            .attr("height", height);
-
-    var diameter = 1500, //max size of the bubbles
-        color = d3.scale.category20b(); //color category
-
-    var bubble = d3.layout.pack()
-        .sort(null)
-        .size([diameter, diameter])
-        .padding(1.5);
-
-    var svg = d3.select("body")
-        .append("svg")
-        .attr("width", diameter)
-        .attr("height", diameter) ;
-
-    svg.append("text")
-        .attr("x", (diameter / 2))
-        .attr("y", 65)
-        .attr("text-anchor", "middle")
-        .style("font-size", "18px")
-        .style("text-decoration", "underline")
-        .text("Word frequencies for year 2012");
+    var prevData = null;
 
     function updateBubbles(yearInUnix) {
-        var d = new Date(yearInUnix * 1000 + moment('1970-01-02', "YYYY MM DD").unix());
-        var year = d.getFullYear();
+        var d = new Date(yearInUnix * 1000 + moment('1970-01-01', "YYYY MM DD").unix());
+        var year = d.getFullYear() + 1;
+
+        var color = d3.scale.category20b(), //color category
+            height = 1500,
+            width = 1500;
+
+        var bubble = d3.layout.pack()
+            .sort(null)
+            .size([width, height])
+            .padding(1.5);
+
+        var svg = d3.select("body")
+            .select("svg")
+            .attr("width", width)
+            .attr("height", height);
+
+        svg.select("text")
+            .attr("x", (width / 2))
+            .attr("y", 65)
+            .attr("text-anchor", "middle")
+            .style("font-size", "18px")
+            .style("text-decoration", "underline")
+            .text("Word frequencies for " + year);
 
         d3.csv(year + "_20.csv", function (error, data) {
 
@@ -71,14 +73,18 @@
             });
 
             //setup the chart
-            var bubbles = svg.append("g")
+            var bubbles = svg.select("g")
                 .attr("transform", "translate(0,0)")
                 .selectAll(".bubble")
-                .data(nodes)
-                .enter();
+                .data(nodes);
+
+            var bubblesEntering = bubbles.enter();
+
+            var bubblesExiting = bubbles.exit();
+            bubblesExiting.remove();
 
             //create the bubbles
-            bubbles.append("circle")
+            bubblesEntering.append("circle")
                 .attr("r", function (d) {
                     return d.r;
                 })
@@ -93,7 +99,7 @@
                 });
 
             //format the text for each bubble
-            bubbles.append("text")
+            bubblesEntering.append("text")
                 .attr("x", function (d) {
                     return d.x;
                 })
@@ -109,7 +115,6 @@
                     "font-family": "Helvetica Neue, Helvetica, Arial, san-serif",
                     "font-size": "16px"
                 });
-
         });
     }
 
@@ -163,14 +168,9 @@
         d3.select('#slider3').call(d3.slider()
                 .axis(true).min(minDateUnix).max(maxDateUnix).step(secondsInYear)
                 .on("slide", function (evt, value) {
-//                var newData = _(site_data).filter(function (site) {
-//                    return site.created_at < value;
-//                });
-                    var newData = value;
-                    // console.log("New set size ", newData.length);
 
 //                displaySites(newData);
-                    updateBubbles(newData);
+                    updateBubbles(value);
                 })
         );
     }
