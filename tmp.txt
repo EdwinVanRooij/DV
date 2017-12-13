@@ -1,4 +1,0 @@
-- relatief de trend weergeven voor een geselecteerde term in de bubble graph bovenin
-- de kleuren zeggen nu nog niks, geef hier een waardevolle betekenis aan of
-  haal de kleuren in essentie weg (door een globale kleur te geven) (misschien met rood en groen aangeven of het niews positief is, positivity recognition op basis van titels proberen) -- niet zelf die recognition maken, maar opzoeken
-- relatief en absoluut mogelijk laten zien, gebruiker bepaalt wat ie ziet
