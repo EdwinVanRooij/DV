@@ -66,7 +66,10 @@
             .append("text")
             .text(function (d) {
                 return d.className;
-            }).attr('fill', 'white');
+            }).attr('fill', 'white')
+            .attr('transform', function(d) {
+                return "translate(" + 0+ "," + 5 + ")";
+            });
 
         node.select("circle")
             .transition().duration(1000)
@@ -113,98 +116,15 @@
 
         d3.csv(year + "_20.csv", function (error, data) {
 
-            console.log(data[0]);
             data = data.map(function (d) {
                 return {name: d["word"], size: d["frequency"]}
             });
             var formatted_data = {
                 "children": data
             };
-
-//            console.log(formatted_data)
             changebubble(formatted_data)
-
         });
-
     }
-
-    // Begin mijn shit
-    //    function updateBubbles(yearInUnix) {
-    //        var d = new Date(yearInUnix * 1000 + moment('1970-01-01', "YYYY MM DD").unix());
-    //        var year = d.getFullYear() + 1;
-    //
-    //        d3.csv(year + "_20.csv", function (error, data) {
-    //
-    //            var svgDoc = d3.select("body").select(".mysvg").attr('width', 2500).attr('height', 2500).select("g");
-    //
-    //            var color = d3.scale.category20b(), //color category
-    //                height = 1500,
-    //                width = 1500;
-    //
-    //            var bubble = d3.layout.pack()
-    //                .sort(null)
-    //                .size([width, height])
-    //                .padding(1.5);
-    //
-    //            data = data.map(function (d) {
-    //                d.value = +d["frequency"];
-    //                return d;
-    //            });
-    //
-    //            var nodes = bubble.nodes({children: data}).filter(function (d) {
-    //                return !d.children;
-    //            });
-    //
-    //            function frequency(d) {
-    //                return d.frequency;
-    //            }
-    //
-    //            console.log(nodes);
-    //
-    //            var bubbles = svgDoc.selectAll("circle").data(nodes, frequency);
-    //            bubbles.exit().remove();
-    //
-    //            var bubblesT = svgDoc.selectAll("text").data(nodes, frequency);
-    //            bubblesT.exit().remove();
-    //
-    //            bubbles.enter().append("circle")
-    //                .attr("r", 0)
-    //                .transition()
-    //                .duration(500)
-    //                .attr("r", function (d) {
-    //                    return d.r;
-    //                })
-    //                .attr("cx", function (d) {
-    //                    return d.x;
-    //                })
-    //                .attr("cy", function (d) {
-    //                    return d.y;
-    //                })
-    //                .style("fill", function (d) {
-    //                    return color(d.value);
-    //                })
-    //                .transition()
-    //                .duration(500);
-    //
-    //            bubbles.enter().append("text")
-    //                .attr("x", function (d) {
-    //                    return d.x;
-    //                })
-    //                .attr("y", function (d) {
-    //                    return d.y + 5;
-    //                })
-    //                .attr("text-anchor", "middle")
-    //                .text(function (d) {
-    //                    return d["word"];
-    //                })
-    //                .style({
-    //                    "fill": "white",
-    //                    "font-family": "Helvetica Neue, Helvetica, Arial, san-serif",
-    //                    "font-size": "16px"
-    //                })
-    //
-    //        });
-    //    }
 
     function initSlider() {
         var minDateUnix = moment('2008-01-01', "YYYY MM DD").unix();
