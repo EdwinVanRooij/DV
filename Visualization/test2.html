@@ -97,16 +97,15 @@
             }
 
             console.log(nodes);
-            var bubbles = svgDoc
-                .selectAll("circle")
-                .data(nodes, frequency);
 
+            var bubbles = svgDoc.selectAll("circle").data(nodes, frequency);
             bubbles.exit().remove();
 
             var bubblesT = svgDoc.selectAll("text").data(nodes, frequency);
             bubblesT.exit().remove();
 
             bubbles.enter().append("circle")
+                .attr("r", 0)
                 .transition()
                 .duration(500)
                 .attr("r", function (d) {
@@ -122,11 +121,9 @@
                     return color(d.value);
                 })
                 .transition()
-                .duration(500) ;
+                .duration(500);
 
             bubbles.enter().append("text")
-                .transition()
-                .duration(500)
                 .attr("x", function (d) {
                     return d.x;
                 })
