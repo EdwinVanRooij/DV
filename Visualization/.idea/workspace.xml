@@ -27,20 +27,21 @@
       <file leaf-file-name="test2.html" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/test2.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="364">
-              <caret line="100" column="52" lean-forward="true" selection-start-line="100" selection-start-column="52" selection-end-line="100" selection-end-column="52" />
+            <state relative-caret-position="624">
+              <caret line="115" column="0" lean-forward="false" selection-start-line="115" selection-start-column="0" selection-end-line="115" selection-end-column="0" />
               <folding>
-                <marker date="1513277013154" expanded="true" signature="3086:3662" ph="//..." />
+                <element signature="e#929#3098#0" expanded="false" />
+                <marker date="1513280457847" expanded="true" signature="5855:6521" ph="//..." />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="2016_20.csv" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/2016_20.csv">
+      <file leaf-file-name="main.css" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/main.css">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="260">
-              <caret line="10" column="10" lean-forward="false" selection-start-line="10" selection-start-column="10" selection-end-line="10" selection-end-column="10" />
+              <caret line="10" column="0" lean-forward="false" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -138,6 +139,7 @@
         <option value="$PROJECT_DIR$/2011_20.csv" />
         <option value="$PROJECT_DIR$/2012_20.csv" />
         <option value="$PROJECT_DIR$/2009_20.csv" />
+        <option value="$PROJECT_DIR$/main.css" />
         <option value="$PROJECT_DIR$/test2.html" />
       </list>
     </option>
@@ -229,12 +231,12 @@
       <workItem from="1511375412067" duration="4204000" />
       <workItem from="1512330228544" duration="1191000" />
       <workItem from="1513181362432" duration="7127000" />
-      <workItem from="1513264100280" duration="11752000" />
+      <workItem from="1513264100280" duration="15144000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="29457000" />
+    <option name="totallyTimeSpent" value="32849000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="336" y="36" width="2560" height="1404" extended-state="6" />
@@ -477,12 +479,21 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/main.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="260">
+          <caret line="10" column="0" lean-forward="false" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/test2.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="364">
-          <caret line="100" column="52" lean-forward="true" selection-start-line="100" selection-start-column="52" selection-end-line="100" selection-end-column="52" />
+        <state relative-caret-position="624">
+          <caret line="115" column="0" lean-forward="false" selection-start-line="115" selection-start-column="0" selection-end-line="115" selection-end-column="0" />
           <folding>
-            <marker date="1513277013154" expanded="true" signature="3086:3662" ph="//..." />
+            <element signature="e#929#3098#0" expanded="false" />
+            <marker date="1513280457847" expanded="true" signature="5855:6521" ph="//..." />
           </folding>
         </state>
       </provider>

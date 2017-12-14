@@ -3,68 +3,109 @@
 <head>
     <title>Word Frequency</title>
     <link rel="stylesheet" href="d3.slider.css"/>
+    <link rel="stylesheet" href="main.css"/>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.3/moment.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
 
     <script src="http://d3js.org/d3.v3.js"></script>
-    <style>
-        #slider3 {
-            margin: 20px 0 10px 20px;
-            width: 1500px;
-        }
-
-        svg {
-            width: 2500px;
-            height: 2500px
-        }
-
-        button {
-            float: left
-        }
-
-        line {
-            stroke: #ddd;
-            shape-rendering: crispEdges;
-        }
-
-        text {
-            text-anchor: middle;
-        }
-
-        circle {
-            fill: orange;
-            stroke: orange;
-            fill-opacity: 0.5;
-        }
-
-        .axis line {
-            fill: none;
-            stroke: #ddd;
-            shape-rendering: crispEdges;
-        }
-
-        .axis path {
-            fill: none;
-        }
-
-        .axis text {
-            font-size: 0.7em;
-            fill: #555;
-            font-family: sans-serif
-        }
-    </style>
 </head>
 <body>
-
 
 <div id="slider3"></div>
 <script src="d3.slider.js"></script>
 
-<svg class="mysvg">
-    <g></g>
-</svg>
+<div id="chart"></div>
+
 <script>
+
+    var diameter = 1500;
+    var color = d3.scale.category20b(); //color category
+    var bubble = d3.layout.pack()
+        .sort(null)
+        .size([diameter, diameter])
+        .padding(10);
+
+    var svg = d3.select("#chart").append("svg")
+        .attr("width", diameter)
+        .attr("height", diameter)
+        .attr("class", "bubble");
+
+    //update function
+    function changebubble(data) {
+        var node = svg.selectAll(".node")
+            .data(
+                bubble.nodes(classes(data)).filter(function (d) {
+                    return !d.children;
+                }),
+                function (d) {
+                    return d.className
+                } // key data based on className to keep object constancy
+            );
+
+        // capture the enter selection
+        var nodeEnter = node.enter()
+            .append("g")
+            .attr("class", "node")
+            .attr("transform", function (d) {
+                return "translate(" + d.x + "," + d.y + ")";
+            });
+
+        // re-use enter selection for circles
+        nodeEnter
+            .append("circle")
+            .attr("r", function (d) {
+                return d.r;
+            })
+            .style("fill", function (d, i) {
+                return color(i);
+            });
+
+        // re-use enter selection for titles
+        nodeEnter
+            .append("text")
+            .text(function (d) {
+                return d.className;
+            }).attr('fill', 'white');
+
+        node.select("circle")
+            .transition().duration(1000)
+            .attr("r", function (d) {
+                return d.r;
+            })
+            .style("fill", function (d, i) {
+                return color(i);
+            });
+
+        node.transition().attr("class", "node")
+            .attr("transform", function (d) {
+                return "translate(" + d.x + "," + d.y + ")";
+            });
+
+        node.exit().remove();
+
+        // Returns a flattened hierarchy containing all leaf nodes under the root.
+        function classes(root) {
+            var classes = [];
+
+            function recurse(name, node) {
+                if (node.children) node.children.forEach(function (child) {
+                    recurse(node.name, child);
+                });
+                else classes.push({
+                    packageName: name,
+                    className: node.name,
+                    value: node.size
+                });
+            }
+
+            recurse(null, root);
+            return {
+                children: classes
+            };
+        }
+
+    }
 
     function updateBubbles(yearInUnix) {
         var d = new Date(yearInUnix * 1000 + moment('1970-01-01', "YYYY MM DD").unix());
@@ -72,78 +113,100 @@
 
         d3.csv(year + "_20.csv", function (error, data) {
 
-            var svgDoc = d3.select("body").select(".mysvg").select("g");
-
-            var color = d3.scale.category20b(), //color category
-                height = 1500,
-                width = 1500;
-
-            var bubble = d3.layout.pack()
-                .sort(null)
-                .size([width, height])
-                .padding(1.5);
-
+            console.log(data[0]);
             data = data.map(function (d) {
-                d.value = +d["frequency"];
-                return d;
+                return {name: d["word"], size: d["frequency"]}
             });
+            var formatted_data = {
+                "children": data
+            };
 
-            var nodes = bubble.nodes({children: data}).filter(function (d) {
-                return !d.children;
-            });
-
-            function frequency(d) {
-                return d.frequency;
-            }
-
-            console.log(nodes);
-
-            var bubbles = svgDoc.selectAll("circle").data(nodes, frequency);
-            bubbles.exit().remove();
-
-            var bubblesT = svgDoc.selectAll("text").data(nodes, frequency);
-            bubblesT.exit().remove();
-
-            bubbles.enter().append("circle")
-                .attr("r", 0)
-                .transition()
-                .duration(500)
-                .attr("r", function (d) {
-                    return d.r;
-                })
-                .attr("cx", function (d) {
-                    return d.x;
-                })
-                .attr("cy", function (d) {
-                    return d.y;
-                })
-                .style("fill", function (d) {
-                    return color(d.value);
-                })
-                .transition()
-                .duration(500);
-
-            bubbles.enter().append("text")
-                .attr("x", function (d) {
-                    return d.x;
-                })
-                .attr("y", function (d) {
-                    return d.y + 5;
-                })
-                .attr("text-anchor", "middle")
-                .text(function (d) {
-                    return d["word"];
-                })
-                .style({
-                    "fill": "white",
-                    "font-family": "Helvetica Neue, Helvetica, Arial, san-serif",
-                    "font-size": "16px"
-                })
+//            console.log(formatted_data)
+            changebubble(formatted_data)
 
         });
+
     }
 
-    function startSlider() {
+    // Begin mijn shit
+    //    function updateBubbles(yearInUnix) {
+    //        var d = new Date(yearInUnix * 1000 + moment('1970-01-01', "YYYY MM DD").unix());
+    //        var year = d.getFullYear() + 1;
+    //
+    //        d3.csv(year + "_20.csv", function (error, data) {
+    //
+    //            var svgDoc = d3.select("body").select(".mysvg").attr('width', 2500).attr('height', 2500).select("g");
+    //
+    //            var color = d3.scale.category20b(), //color category
+    //                height = 1500,
+    //                width = 1500;
+    //
+    //            var bubble = d3.layout.pack()
+    //                .sort(null)
+    //                .size([width, height])
+    //                .padding(1.5);
+    //
+    //            data = data.map(function (d) {
+    //                d.value = +d["frequency"];
+    //                return d;
+    //            });
+    //
+    //            var nodes = bubble.nodes({children: data}).filter(function (d) {
+    //                return !d.children;
+    //            });
+    //
+    //            function frequency(d) {
+    //                return d.frequency;
+    //            }
+    //
+    //            console.log(nodes);
+    //
+    //            var bubbles = svgDoc.selectAll("circle").data(nodes, frequency);
+    //            bubbles.exit().remove();
+    //
+    //            var bubblesT = svgDoc.selectAll("text").data(nodes, frequency);
+    //            bubblesT.exit().remove();
+    //
+    //            bubbles.enter().append("circle")
+    //                .attr("r", 0)
+    //                .transition()
+    //                .duration(500)
+    //                .attr("r", function (d) {
+    //                    return d.r;
+    //                })
+    //                .attr("cx", function (d) {
+    //                    return d.x;
+    //                })
+    //                .attr("cy", function (d) {
+    //                    return d.y;
+    //                })
+    //                .style("fill", function (d) {
+    //                    return color(d.value);
+    //                })
+    //                .transition()
+    //                .duration(500);
+    //
+    //            bubbles.enter().append("text")
+    //                .attr("x", function (d) {
+    //                    return d.x;
+    //                })
+    //                .attr("y", function (d) {
+    //                    return d.y + 5;
+    //                })
+    //                .attr("text-anchor", "middle")
+    //                .text(function (d) {
+    //                    return d["word"];
+    //                })
+    //                .style({
+    //                    "fill": "white",
+    //                    "font-family": "Helvetica Neue, Helvetica, Arial, san-serif",
+    //                    "font-size": "16px"
+    //                })
+    //
+    //        });
+    //    }
+
+    function initSlider() {
         var minDateUnix = moment('2008-01-01', "YYYY MM DD").unix();
         var maxDateUnix = moment('2016-01-01', "YYYY MM DD").unix();
 
@@ -158,11 +221,9 @@
         );
     }
 
-    startSlider();
-
     var start = moment('2008-01-01', "YYYY MM DD").unix();
     updateBubbles(start);
-
+    initSlider();
 </script>
 </body>
 </html>
