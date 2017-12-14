@@ -61,20 +61,21 @@
 <div id="slider3"></div>
 <script src="d3.slider.js"></script>
 
+<!--&lt;!&ndash;svg&ndash;&gt; een group erin-->
 <svg class="mysvg">
     <g></g>
 </svg>
 <script>
 
     //2 different data arrays
-    var dataArray1 = [30, 35, 45, 55, 70];
-    var dataArray2 = [50, 55, 45, 35, 20, 25, 25, 40];
-
-    //globals
-    var dataIndex = 1;
-    var xBuffer = 50;
-    var yBuffer = 150;
-    var lineLength = 400;
+//    var dataArray1 = [30, 35, 45, 55, 70];
+//    var dataArray2 = [50, 55, 45, 35, 20, 25, 25, 40];
+//
+//    //globals
+//    var dataIndex = 1;
+//    var xBuffer = 50;
+//    var yBuffer = 150;
+//    var lineLength = 400;
 
     //create main svg element
 
@@ -131,6 +132,7 @@
         d3.csv(year + "_20.csv", function (error, data) {
 
             var svgDoc = d3.select("body").select(".mysvg").select("g");
+
 
             var color = d3.scale.category20b(), //color category
                 height = 1500,
