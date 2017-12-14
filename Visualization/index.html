@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <head>
-    <title>D3 Mapping Timeline</title>
+    <title>Word Frequency</title>
     <meta charset="utf-8">
     <link rel="stylesheet" href="d3.slider.css"/>
 
@@ -11,25 +11,25 @@
         }
     </style>
 
-
-    <script src="http://d3js.org/topojson.v1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.3/moment.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
 
-    <script src="http://d3js.org/d3.v3.min.js"></script>
-    <script src="http://dimplejs.org/dist/dimple.v2.0.0.min.js"></script>
+    <!--<script src="http://d3js.org/d3.v3.min.js"></script>-->
+    <!--<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>-->
+    <script src="http://d3js.org/d3.v3.js"></script>
+    <!--<script src="d3.min.js"></script>-->
+    <!--<script src="http://dimplejs.org/dist/dimple.v2.0.0.min.js"></script>-->
 
 </head>
 <body>
-<script src="http://d3js.org/d3.v3.min.js"></script>
 
-<script src="d3.slider.js"></script>
 <div id="slider3"></div>
 <svg>
     <text></text>
-    <g></g>
+    <g transform="translate(0,0)"></g>
 </svg>
 
+<script src="d3.slider.js"></script>
 <script type="text/javascript">
 
     var color = d3.scale.category20b(), //color category
@@ -73,14 +73,11 @@
 
             //setup the chart
             var bubbles = svg.select("g")
-                .attr("transform", "translate(0,0)")
                 .selectAll(".bubble")
                 .data(nodes);
 
-            var bubblesEntering = bubbles.enter();
-
-            //create the bubbles
-            bubblesEntering.append("circle")
+//            var bubblesEntering = bubbles.enter();
+            bubbles.enter().append("circle")
                 .attr("r", function (d) {
                     return d.r;
                 })
@@ -94,25 +91,27 @@
                     return color(d.value);
                 });
 
-            //format the text for each bubble
-            bubblesEntering.append("text")
-                .attr("x", function (d) {
-                    return d.x;
-                })
-                .attr("y", function (d) {
-                    return d.y + 5;
-                })
-                .attr("text-anchor", "middle")
-                .text(function (d) {
-                    return d["word"];
-                })
-                .style({
-                    "fill": "white",
-                    "font-family": "Helvetica Neue, Helvetica, Arial, san-serif",
-                    "font-size": "16px"
-                });
 
-            bubbles.exit().transition().duration(200).remove();
+            bubbles.exit().remove();
+
+
+//            //format the text for each bubble
+//            bubblesEntering.append("text")
+//                .attr("x", function (d) {
+//                    return d.x;
+//                })
+//                .attr("y", function (d) {
+//                    return d.y + 5;
+//                })
+//                .attr("text-anchor", "middle")
+//                .text(function (d) {
+//                    return d["word"];
+//                })
+//                .style({
+//                    "fill": "white",
+//                    "font-family": "Helvetica Neue, Helvetica, Arial, san-serif",
+//                    "font-size": "16px"
+//                });
         });
     }
 
