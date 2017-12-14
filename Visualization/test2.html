@@ -15,8 +15,8 @@
         }
 
         svg {
-            width: 1500px;
-            height: 1500px
+            width: 2500px;
+            height: 2500px
         }
 
         button {
@@ -61,70 +61,11 @@
 <div id="slider3"></div>
 <script src="d3.slider.js"></script>
 
-<!--&lt;!&ndash;svg&ndash;&gt; een group erin-->
 <svg class="mysvg">
     <g></g>
 </svg>
 <script>
 
-    //2 different data arrays
-//    var dataArray1 = [30, 35, 45, 55, 70];
-//    var dataArray2 = [50, 55, 45, 35, 20, 25, 25, 40];
-//
-//    //globals
-//    var dataIndex = 1;
-//    var xBuffer = 50;
-//    var yBuffer = 150;
-//    var lineLength = 400;
-
-    //create main svg element
-
-
-    //    d3.csv("2008_20.csv", function (error, data) {
-    //        data = data.map(function (d) {
-    //            d.value = +d["frequency"];
-    //            return d;
-    //        });
-    //        var nodes = bubble.nodes({children: data}).filter(function (d) {
-    //            return !d.children;
-    //        });
-    //
-    //        var bubbles = svgDoc.append("g")
-    //            .selectAll("circle")
-    //            .data(nodes);
-    //
-    //        var bubblesEntering = bubbles.enter();
-    //        bubblesEntering.append("circle")
-    //            .attr("r", function (d) {
-    //                return d.r;
-    //            })
-    //            .attr("cx", function (d) {
-    //                return d.x;
-    //            })
-    //            .attr("cy", function (d) {
-    //                return d.y;
-    //            })
-    //            .style("fill", function (d) {
-    //                return color(d.value);
-    //            });
-    //
-    //        bubblesEntering.append("text")
-    //            .attr("x", function (d) {
-    //                return d.x;
-    //            })
-    //            .attr("y", function (d) {
-    //                return d.y + 5;
-    //            })
-    //            .attr("text-anchor", "middle")
-    //            .text(function (d) {
-    //                return d["word"];
-    //            })
-    //            .style({
-    //                "fill": "white",
-    //                "font-family": "Helvetica Neue, Helvetica, Arial, san-serif",
-    //                "font-size": "16px"
-    //            });
-    //    });
     function updateBubbles(yearInUnix) {
         var d = new Date(yearInUnix * 1000 + moment('1970-01-01', "YYYY MM DD").unix());
         var year = d.getFullYear() + 1;
@@ -132,7 +73,6 @@
         d3.csv(year + "_20.csv", function (error, data) {
 
             var svgDoc = d3.select("body").select(".mysvg").select("g");
-
 
             var color = d3.scale.category20b(), //color category
                 height = 1500,
@@ -151,19 +91,24 @@
             var nodes = bubble.nodes({children: data}).filter(function (d) {
                 return !d.children;
             });
-//            console.log(data);
 
-            //setup the chart
+            function frequency(d) {
+                return d.frequency;
+            }
+
+            console.log(nodes);
             var bubbles = svgDoc
                 .selectAll("circle")
-                .data(nodes);
+                .data(nodes, frequency);
 
-            var bubblesEntering = bubbles.enter();
-            var bubblesExiting = bubbles.exit();
-            console.log(bubblesEntering);
-            console.log(bubblesExiting);
+            bubbles.exit().remove();
 
-            bubblesEntering.append("circle")
+            var bubblesT = svgDoc.selectAll("text").data(nodes, frequency);
+            bubblesT.exit().remove();
+
+            bubbles.enter().append("circle")
+                .transition()
+                .duration(500)
                 .attr("r", function (d) {
                     return d.r;
                 })
@@ -175,9 +120,13 @@
                 })
                 .style("fill", function (d) {
                     return color(d.value);
-                });
+                })
+                .transition()
+                .duration(500) ;
 
-            bubblesEntering.append("text")
+            bubbles.enter().append("text")
+                .transition()
+                .duration(500)
                 .attr("x", function (d) {
                     return d.x;
                 })
@@ -192,64 +141,14 @@
                     "fill": "white",
                     "font-family": "Helvetica Neue, Helvetica, Arial, san-serif",
                     "font-size": "16px"
-                });
+                })
 
         });
     }
 
-    //
-    //    //create basic circles
-    //    svgDoc.append("g").selectAll("circle")
-    //        .data(eval("dataArray" + dataIndex))
-    //        .enter()
-    //        .append("circle")
-    //        .attr("cx", function (d, i) {
-    //            var spacing = lineLength / (eval("dataArray" + dataIndex).length);
-    //            return xBuffer + (i * spacing)
-    //        })
-    //        .attr("cy", yBuffer)
-    //        .attr("r", function (d, i) {
-    //            return d
-    //        });
-    //
-    //    //button to swap over datasets
-    //    d3.select("body").append("button")
-    //        .text("change data")
-    //        .on("click", function () {
-    //            //select new data
-    //            if (dataIndex == 1) {
-    //                dataIndex = 2;
-    //            } else {
-    //                dataIndex = 1;
-    //            }
-    //            //rejoin data
-    //            var circle = svgDoc.select("g").selectAll("circle")
-    //                .data(eval("dataArray" + dataIndex));
-    //
-    //            circle.exit().remove();//remove unneeded circles
-    //            circle.enter().append("circle")
-    //                .attr("r", 0);//create any new circles needed
-    //
-    //            //update all circles to new positions
-    //            circle.transition()
-    //                .duration(500)
-    //                .attr("cx", function (d, i) {
-    //                    var spacing = lineLength / (eval("dataArray" + dataIndex).length);
-    //                    return xBuffer + (i * spacing)
-    //                })
-    //                .attr("cy", yBuffer)
-    //                .attr("r", function (d, i) {
-    //                    return d
-    //                });
-    //
-    //            d3.select("text").text("dataset" + dataIndex);
-    //
-    //        });//end click function
-
     function startSlider() {
         var minDateUnix = moment('2008-01-01', "YYYY MM DD").unix();
         var maxDateUnix = moment('2016-01-01', "YYYY MM DD").unix();
-        var secondsInDay = 60 * 60 * 24;
 
         var secondsInYear = 365.25 * 24 * 60 * 60; // 31557600
 
