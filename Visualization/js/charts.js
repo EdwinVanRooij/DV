@@ -1,7 +1,6 @@
-var diameter = 1000;
+var diameter = 1250;
 
 // var color = d3.scale.category20b(); //color category
-
 // Original shaded
 // var color = [ //
 //     '#08181D', '#0B232B', '#02F2F39', '#123A47', '#163656',
@@ -40,15 +39,15 @@ var color = [
 
 color = color.reverse();
 
+var svg = d3.select("#bubble-chart").select("svg");
+
+var width = d3.select("#bubble-chart").select("svg").node().width.baseVal.value;
+console.log(width);
+
 var bubble = d3.layout.pack()
     .sort(null)
-    .size([diameter, diameter])
-    .padding(10);
+    .size([width, width]);
 
-var svg = d3.select("#bubble-chart").append("svg")
-    .attr("width", diameter)
-    .attr("height", diameter)
-    .attr("class", "bubble");
 
 //update function
 function changebubble(data) {

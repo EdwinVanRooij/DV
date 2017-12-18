@@ -5,10 +5,10 @@
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
+    <meta name="description" content="World News - Data Visualization">
+    <meta name="author" content="Edwin van Rooij">
 
-    <title>Stylish Portfolio - Start Bootstrap Template</title>
+    <title>Reddit Worldnews</title>
 
     <!--My shit-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.3/moment.min.js"></script>
@@ -27,7 +27,7 @@
     <link href="vendor/simple-line-icons/css/simple-line-icons.css" rel="stylesheet">
 
     <!-- Custom CSS -->
-    <link href="css/stylish-portfolio.min.css" rel="stylesheet">
+    <link href="css/stylish-portfolio.css" rel="stylesheet">
 
 </head>
 
@@ -35,61 +35,42 @@
 
 <script src="d3.slider.js"></script>
 
-<!-- Navigation -->
-<a class="menu-toggle rounded" href="#">
-    <i class="fa fa-bars"></i>
-</a>
-<nav id="sidebar-wrapper">
-    <ul class="sidebar-nav">
-        <li class="sidebar-brand">
-            <a class="js-scroll-trigger" href="#page-top">Start Bootstrap</a>
-        </li>
-        <li class="sidebar-nav-item">
-            <a class="js-scroll-trigger" href="#page-top">Home</a>
-        </li>
-        <li class="sidebar-nav-item">
-            <a class="js-scroll-trigger" href="#about">About</a>
-        </li>
-        <li class="sidebar-nav-item">
-            <a class="js-scroll-trigger" href="#services">Services</a>
-        </li>
-        <li class="sidebar-nav-item">
-            <a class="js-scroll-trigger" href="#portfolio">Portfolio</a>
-        </li>
-        <li class="sidebar-nav-item">
-            <a class="js-scroll-trigger" href="#contact">Contact</a>
-        </li>
-    </ul>
-</nav>
-
 <!-- Header -->
 <header class="masthead d-flex">
     <div class="container text-center my-auto">
-        <h1 class="mb-1">Stylish Portfolio</h1>
+        <h1 class="mb-1">Reddit Worldnews</h1>
         <h3 class="mb-5">
-            <em>A Free Bootstrap Theme by Start Bootstrap</em>
+            <em>A data visualization for the subreddit /r/worldnews</em>
         </h3>
-        <a class="btn btn-primary btn-xl js-scroll-trigger" href="#about">Find Out More</a>
+        <a class="btn btn-primary btn-xl js-scroll-trigger" href="#about">Go To Visualization</a>
     </div>
     <div class="overlay"></div>
 </header>
 
 <!-- About -->
 <section class="content-section bg-light" id="about">
-    <div class="container text-center bubble-chart-container">
+
+    <div class="container text-center">
+        <div class="col-lg-10 mx-auto">
+
+            <h2>These are the most popular words in the post's titles.</h2>
+            <p class="lead mb-5">Scroll down to use the time line to see how these changed over the years between 2008
+                and
+                2016.</p>
+        </div>
+
+    </div>
+
+    <div class="bubble-chart-container">
         <!--<div class="row">-->
-            <div class="col-lg-10 mx-auto">
 
-                <h2>Stylish Portfolio is the perfect theme for your next project!</h2>
 
-                <p class="lead mb-5">This theme features a flexible, UX friendly sidebar menu and stock photos from our
-                    friends at
-                    <a href="https://unsplash.com/">Unsplash</a>!</p>
-                <a class="btn btn-dark btn-xl js-scroll-trigger" href="#services">What We Offer</a>
+            <div id="bubble-chart">
+               <svg class="bubble">
 
-                <div id="bubble-chart"></div>
-                <div id="slider"></div>
+               </svg>
             </div>
+            <div id="slider"></div>
         <!--</div>-->
     </div>
 </section>
@@ -98,8 +79,7 @@
 <section class="content-section bg-primary text-white text-center" id="services">
     <div class="container">
         <div class="content-section-heading">
-            <h3 class="text-secondary mb-0">Services</h3>
-            <h2 class="mb-5">What We Offer</h2>
+            <h2 class="mb-5">Top Stories</h2>
         </div>
         <div class="row">
             <div class="col-lg-3 col-md-6 mb-5 mb-lg-0">

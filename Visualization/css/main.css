@@ -2,16 +2,32 @@
     text-anchor: middle;
 }
 
-circle {
-    /*fill: orange;*/
-    stroke: black;
-    fill-opacity: 0.75;
-    stroke-opacity: 0.3;
+#bubble-chart {
+    text-align: center;
+    height: 1250px;
 }
 
-.container.text-center.bubble-chart-container {
-    margin-left: auto;
-    margin-right: auto;
+#bubble-chart svg {
+    width: 75%;
+    height: 1250px;
+    text-align: center;
+}
+
+circle {
+    stroke: rgba(0, 0, 0, 0.1);
+    fill-opacity: 0.75;
+}
+
+.bubble-chart-container {
+    position: relative;
+    display: table;
+    height: auto;
+    background-size: cover;
+
+    padding-left: 5%;
+    padding-right: 5%;
+    padding-bottom: 5%;
+    width: 95%;
 }
 
 .axis line {
