@@ -12,10 +12,11 @@
 </head>
 <body>
 
-<div id="slider3"></div>
 <script src="d3.slider.js"></script>
 
-<div id="chart"></div>
+<div id="bubble-chart"></div>
+
+<div id="slider3"></div>
 
 <script>
 
@@ -26,7 +27,7 @@
         .size([diameter, diameter])
         .padding(10);
 
-    var svg = d3.select("#chart").append("svg")
+    var svg = d3.select("#bubble-chart").append("svg")
         .attr("width", diameter)
         .attr("height", diameter)
         .attr("class", "bubble");
@@ -51,28 +52,23 @@
                 return "translate(" + d.x + "," + d.y + ")";
             });
 
-        // re-use enter selection for circles
+        // Entering circles
         nodeEnter
             .append("circle")
+            .style("fill", function (d, i) {
+                return (i);
+            })
+            .attr("r", 0)
+            .transition().duration(1500)
             .attr("r", function (d) {
                 return d.r;
-            })
-            .style("fill", function (d, i) {
-                return color(i);
             });
 
-        // re-use enter selection for titles
-        nodeEnter
-            .append("text")
-            .text(function (d) {
-                return d.className;
-            }).attr('fill', 'white')
-            .attr('transform', function (d) {
-                return "translate(" + 0 + "," + 5 + ")";
-            });
+        console.log('Entering: ' + nodeEnter.size());
 
+        // Repositioning circles
         node.select("circle")
-            .transition().duration(1000)
+            .transition().duration(1500)
             .attr("r", function (d) {
                 return d.r;
             })
@@ -80,12 +76,57 @@
                 return color(i);
             });
 
-        node.transition().attr("class", "node")
+        node.transition()
+            .duration(2500)
+            .attr("class", "node")
             .attr("transform", function (d) {
                 return "translate(" + d.x + "," + d.y + ")";
             });
 
-        node.exit().remove();
+        // Entering text
+        nodeEnter
+        // Pre transition
+            .append("text")
+            .attr('fill', 'white')
+            .attr("opacity", 0)
+            .text(function (d) {
+                return d.className;
+            })
+
+            // During transition
+            .transition().delay(2500).duration(750)
+
+        // Post transition
+            .attr("opacity", 1)
+            .attr('transform', function (d) {
+                return "translate(" + 0 + "," + 5 + ")";
+            });
+
+        // capture the enter selection
+        var nodeExit = node.exit();
+
+        console.log('Exiting: ' + nodeExit.size());
+        console.log(nodeExit);
+
+        nodeExit.select("circle")
+            .transition().duration(750)
+            .attr("r", 0)
+            .remove();
+
+        nodeExit.select("text")
+            .transition().duration(500)
+            .attr("opacity", 0)
+            .remove();
+
+//        node.exit()
+//            .style("background", "red")
+//            .transition()
+//            .style("opacity", 0)
+//            .remove();
+
+        node.exit()
+            .transition().duration(750)
+            .remove();
 
         // Returns a flattened hierarchy containing all leaf nodes under the root.
         function classes(root) {
@@ -114,17 +155,21 @@
         var d = new Date(yearInUnix * 1000 + moment('1970-01-01', "YYYY MM DD").unix());
         var year = d.getFullYear() + 1;
 
-        d3.csv('data/'+ year + "_100.csv", function (error, data) {
+        d3.csv('data/' + year + "_100.csv", function (error, data) {
 
             data = data.slice(0, 15); // only use the first 20 records
             data = data.map(function (d) {
-                return {name: d["word"], size: d["frequency"]}
+                return {name: capitalizeFirstLetter(d["word"]), size: d["frequency"]}
             });
             var formatted_data = {
                 "children": data
             };
             changebubble(formatted_data)
         });
+    }
+
+    function capitalizeFirstLetter(string) {
+        return string.charAt(0).toUpperCase() + string.slice(1);
     }
 
     function initSlider() {
