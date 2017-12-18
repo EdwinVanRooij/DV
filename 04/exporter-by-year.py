@@ -7,7 +7,9 @@ import argparse
 
 parser = argparse.ArgumentParser()
 parser.add_argument("year")
-parser.add_argument("amount")
+parser.add_argument('--amount', dest='amount', action='store', default=100,
+                    help='amount of words to store')
+
 args = parser.parse_args()
 
 year = int(args.year)
@@ -46,6 +48,7 @@ from nltk.corpus import stopwords
 counts = Counter()
 s_words = stopwords.words('english')
 s_words.append('-')
+s_words.append('|')
 
 for sentence in titles:
     words = [word.strip('.,?!"\'').lower() for word in sentence.split()]

@@ -1,58 +1,114 @@
-<!DOCTYPE html>
+<!doctype html>
+<html>
 <head>
     <title>Word Frequency</title>
-    <meta charset="utf-8">
     <link rel="stylesheet" href="d3.slider.css"/>
-
-    <style>
-        #slider3 {
-            margin: 20px 0 10px 20px;
-            width: 1500px;
-        }
-    </style>
+    <link rel="stylesheet" href="main.css"/>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.3/moment.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
 
-    <!--<script src="http://d3js.org/d3.v3.min.js"></script>-->
-    <!--<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>-->
     <script src="http://d3js.org/d3.v3.js"></script>
-    <!--<script src="d3.min.js"></script>-->
-    <!--<script src="http://dimplejs.org/dist/dimple.v2.0.0.min.js"></script>-->
-
 </head>
 <body>
 
 <div id="slider3"></div>
-<svg>
-    <text></text>
-    <g transform="translate(0,0)"></g>
-</svg>
-
 <script src="d3.slider.js"></script>
-<script type="text/javascript">
 
-    var color = d3.scale.category20b(), //color category
-        height = 1500,
-        width = 1500;
+<div id="chart"></div>
 
+<script>
+
+    var diameter = 1500;
+    var color = d3.scale.category20b(); //color category
     var bubble = d3.layout.pack()
         .sort(null)
-        .size([width, height])
-        .padding(1.5);
+        .size([diameter, diameter])
+        .padding(10);
 
-    var svg = d3.select("body")
-        .select("svg")
-        .attr("width", width)
-        .attr("height", height);
+    var svg = d3.select("#chart").append("svg")
+        .attr("width", diameter)
+        .attr("height", diameter)
+        .attr("class", "bubble");
 
-    svg.select("text")
-        .attr("x", (width / 2))
-        .attr("y", 65)
-        .attr("text-anchor", "middle")
-        .style("font-size", "18px")
-        .style("text-decoration", "underline")
-        .text("Word frequencies");
+    //update function
+    function changebubble(data) {
+        var node = svg.selectAll(".node")
+            .data(
+                bubble.nodes(classes(data)).filter(function (d) {
+                    return !d.children;
+                }),
+                function (d) {
+                    return d.className
+                } // key data based on className to keep object constancy
+            );
+
+        // capture the enter selection
+        var nodeEnter = node.enter()
+            .append("g")
+            .attr("class", "node")
+            .attr("transform", function (d) {
+                return "translate(" + d.x + "," + d.y + ")";
+            });
+
+        // re-use enter selection for circles
+        nodeEnter
+            .append("circle")
+            .attr("r", function (d) {
+                return d.r;
+            })
+            .style("fill", function (d, i) {
+                return color(i);
+            });
+
+        // re-use enter selection for titles
+        nodeEnter
+            .append("text")
+            .text(function (d) {
+                return d.className;
+            }).attr('fill', 'white')
+            .attr('transform', function (d) {
+                return "translate(" + 0 + "," + 5 + ")";
+            });
+
+        node.select("circle")
+            .transition().duration(1000)
+            .attr("r", function (d) {
+                return d.r;
+            })
+            .style("fill", function (d, i) {
+                return color(i);
+            });
+
+        node.transition().attr("class", "node")
+            .attr("transform", function (d) {
+                return "translate(" + d.x + "," + d.y + ")";
+            });
+
+        node.exit().remove();
+
+        // Returns a flattened hierarchy containing all leaf nodes under the root.
+        function classes(root) {
+            var classes = [];
+
+            function recurse(name, node) {
+                if (node.children) node.children.forEach(function (child) {
+                    recurse(node.name, child);
+                });
+                else classes.push({
+                    packageName: name,
+                    className: node.name,
+                    value: node.size
+                });
+            }
+
+            recurse(null, root);
+            return {
+                children: classes
+            };
+        }
+
+    }
 
     function updateBubbles(yearInUnix) {
         var d = new Date(yearInUnix * 1000 + moment('1970-01-01', "YYYY MM DD").unix());
@@ -60,129 +116,36 @@
 
         d3.csv(year + "_20.csv", function (error, data) {
 
-            //convert numerical values from strings to numbers
+            data = data.slice(0, 20); // only use the first 20 records
             data = data.map(function (d) {
-                d.value = +d["frequency"];
-                return d;
+                return {name: d["word"], size: d["frequency"]}
             });
-
-            //bubbles needs very specific format, convert data to this.
-            var nodes = bubble.nodes({children: data}).filter(function (d) {
-                return !d.children;
-            });
-
-            //setup the chart
-            var bubbles = svg.select("g")
-                .selectAll(".bubble")
-                .data(nodes);
-
-//            var bubblesEntering = bubbles.enter();
-            bubbles.enter().append("circle")
-                .attr("r", function (d) {
-                    return d.r;
-                })
-                .attr("cx", function (d) {
-                    return d.x;
-                })
-                .attr("cy", function (d) {
-                    return d.y;
-                })
-                .style("fill", function (d) {
-                    return color(d.value);
-                });
-
-
-            bubbles.exit().remove();
-
-
-//            //format the text for each bubble
-//            bubblesEntering.append("text")
-//                .attr("x", function (d) {
-//                    return d.x;
-//                })
-//                .attr("y", function (d) {
-//                    return d.y + 5;
-//                })
-//                .attr("text-anchor", "middle")
-//                .text(function (d) {
-//                    return d["word"];
-//                })
-//                .style({
-//                    "fill": "white",
-//                    "font-family": "Helvetica Neue, Helvetica, Arial, san-serif",
-//                    "font-size": "16px"
-//                });
+            var formatted_data = {
+                "children": data
+            };
+            changebubble(formatted_data)
         });
     }
 
-
-    // Trend
-    //        function draw(data) {
-    //
-    //            /*
-    //              D3.js setup code
-    //            */
-    //
-    //            "use strict";
-    //            var margin = 175,
-    //                width = 1400 - margin,
-    //                height = 1000 - margin;
-    //
-    //
-    //            var svg = d3.select("body")
-    //                .append("svg")
-    //                .attr("width", width)
-    //                .attr("height", height)
-    //                .append('g')
-    //                .attr('class', 'chart');
-    //
-    //            svg.append("text")
-    //                .attr("x", (width / 2))
-    //                .attr("y", 65)
-    //                .attr("text-anchor", "middle")
-    //                .style("font-size", "18px")
-    //                .style("text-decoration", "underline")
-    //                .text("'Iran' word frequency trend");
-    //
-    //            /*
-    //              Dimple.js Chart construction code
-    //            */
-    //
-    //            var myChart = new dimple.chart(svg, data);
-    //            myChart.addTimeAxis("x", "date");
-    //            myChart.addMeasureAxis("y", "frequency");
-    //            myChart.addSeries(null, dimple.plot.line);
-    //            myChart.draw();
-    //        }
-
-    function startSlider() {
+    function initSlider() {
         var minDateUnix = moment('2008-01-01', "YYYY MM DD").unix();
         var maxDateUnix = moment('2016-01-01', "YYYY MM DD").unix();
-        var secondsInDay = 60 * 60 * 24;
 
         var secondsInYear = 365.25 * 24 * 60 * 60; // 31557600
 
         d3.select('#slider3').call(d3.slider()
-                .axis(true).min(minDateUnix).max(maxDateUnix).step(secondsInYear)
-                .on("slide", function (evt, value) {
+            .axis(true).min(minDateUnix).max(maxDateUnix).step(secondsInYear)
+            .on("slide", function (evt, value) {
 
-//                displaySites(newData);
-                    updateBubbles(value);
-                })
+                updateBubbles(value);
+            })
         );
     }
 
-    startSlider();
-
-    var startDateUnix = moment('2008-01-01', "YYYY MM DD").unix();
-    updateBubbles(startDateUnix);
-    //    d3.csv("iran-trend.csv", draw);
+    var start = moment('2008-01-01', "YYYY MM DD").unix();
+    updateBubbles(start);
+    initSlider();
 </script>
-<!--<script type="text/javascript">-->
-<!--/*-->
-<!--Use D3 (not dimple.js) to load the TSV file-->
-<!--and pass the contents of it to the draw function-->
-<!--*/-->
-
-<!--</script>-->
 </body>
+</html>
+
