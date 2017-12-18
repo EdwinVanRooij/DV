@@ -48,7 +48,11 @@ from nltk.corpus import stopwords
 counts = Counter()
 s_words = stopwords.words('english')
 s_words.append('-')
+s_words.append('--')
+s_words.append('---')
+s_words.append('----')
 s_words.append('|')
+s_words.append('')
 
 for sentence in titles:
     words = [word.strip('.,?!"\'').lower() for word in sentence.split()]
