@@ -129,10 +129,7 @@ function changebubble(data) {
 
 }
 
-function updateBubbles(yearInUnix) {
-    var d = new Date(yearInUnix * 1000 + moment('1970-01-01', "YYYY MM DD").unix());
-    var year = d.getFullYear() + 1;
-
+function updateBubbles(year) {
     d3.csv('data/' + year + "_100.csv", function (error, data) {
 
         data = data.slice(0, 15); // only use the first 20 records
@@ -151,13 +148,8 @@ function capitalizeFirstLetter(string) {
 }
 
 function initSlider() {
-    var minDateUnix = moment('2008-01-01', "YYYY MM DD").unix();
-    var maxDateUnix = moment('2016-01-01', "YYYY MM DD").unix();
-
-    var secondsInYear = 365.25 * 24 * 60 * 60; // 31557600
-
     d3.select('#slider').call(d3.slider()
-        .axis(true).min(minDateUnix).max(maxDateUnix).step(secondsInYear)
+        .axis(true).min(2008).max(2016).step(1)
         .on("slide", function (evt, value) {
 
             updateBubbles(value);
@@ -165,6 +157,5 @@ function initSlider() {
     );
 }
 
-var start = moment('2008-01-01', "YYYY MM DD").unix();
-updateBubbles(start);
+updateBubbles(2008);
 initSlider();
