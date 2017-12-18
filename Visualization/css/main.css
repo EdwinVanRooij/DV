@@ -4,12 +4,12 @@
 
 #bubble-chart {
     text-align: center;
-    height: 1250px;
+    height: 2500px;
 }
 
 #bubble-chart svg {
     width: 75%;
-    height: 1250px;
+    height: 2500px;
     text-align: center;
 }
 
