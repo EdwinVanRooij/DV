@@ -13,8 +13,13 @@ body {
     font-family: 'Source Sans Pro';
 }
 
+.masthead.d-flex h3 {
+    color: rgba(255, 255, 255, 0.95);
+    /*text-shadow: -1px 1px #fff;*/
+    text-shadow: 0 0 3px rgba(0, 0, 0, 0.75)
+}
 
-.masthead.d-flex h3, h1 {
+.masthead.d-flex h1 {
     color: rgba(255, 255, 255, 0.95);
     /*text-shadow: -1px 1px #fff;*/
     text-shadow: 0 0 3px rgba(0, 0, 0, 0.75)
@@ -49,7 +54,7 @@ h6 {
 
 .text-faded {
     color: rgba(255, 255, 255, 0.7);
-    }
+}
 
 /* Map */
 .map {

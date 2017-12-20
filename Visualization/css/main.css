@@ -1,5 +1,10 @@
 #bubble-chart text {
     text-anchor: middle;
+     text-shadow:
+    -1px -1px 0 rgba(0,0,0,0.15),
+    1px -1px 0 rgba(0,0,0,0.15),
+    -1px 1px 0 rgba(0,0,0,0.15),
+    1px 1px 0 rgba(0,0,0,0.15);
 }
 
 #bubble-chart {
@@ -20,8 +25,8 @@
 }
 
 circle {
-    stroke: rgba(0, 0, 0, 0.1);
-    fill-opacity: 0.75;
+    stroke: rgba(0, 0, 0, 0.15);
+    fill-opacity: 0.85;
 }
 
 .bubble-chart-container {
