@@ -243,7 +243,6 @@ function updateYear(newYear) {
 }
 
 function updateBubbles(year) {
-    console.log('updating for year ' + year);
     updateYear(year);
     d3.csv('data/' + year + "_100.csv", function (error, data) {
 
