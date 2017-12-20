@@ -11,4 +11,4 @@ df = df.drop(labels=['subreddit', 'over_18', 'time_created', 'down_votes'], axis
 df = df[df['title'].str.contains(word)]
 df = df.sort_values(by=['up_votes'], ascending=False)
 
-df[0:stories].to_csv('top-{}-stories-{}.csv'.format(stories, word), sep='\t', encoding='utf-8')
+df[0:stories].to_csv('../data/top-{}-stories-{}.csv'.format(stories, word), sep='\t', encoding='utf-8')
